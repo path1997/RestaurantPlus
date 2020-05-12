@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/imimage"
+            android:layout_width="103dp"
+            android:layout_height="66dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/txname"
+            android:layout_width="141dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@+id/imimage"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txprice"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txname"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/imimage"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/btMinus"
+            android:layout_width="18dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btRemove"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/txprice"
+            android:text="-"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/btPlus"
+            android:layout_width="19dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btRemove"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:text="+"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:visible="true" />
+
+        <TextView
+            android:id="@+id/btRemove"
+            android:layout_width="111dp"
+            android:layout_height="33dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toEndOf="@+id/txname"
+            android:text="Remove item"
+            android:textAlignment="center"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/txquantity"
+            android:layout_width="40dp"
+            android:layout_height="32dp"
+            android:layout_below="@+id/btRemove"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/btPlus"
+            android:layout_toEndOf="@+id/btMinus"
+            android:textAlignment="center"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/txitemsum"
+            android:layout_width="143dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txprice"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toStartOf="@+id/btMinus"
+            android:layout_toEndOf="@+id/imimage"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+</LinearLayout>
