@@ -19,12 +19,13 @@ import android.widget.ViewFlipper;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.example.restaurantplus.CartDb;
+import com.example.restaurantplus.MainActivity;
 import com.example.restaurantplus.R;
 import com.example.restaurantplus.RequestHandler;
 import com.example.restaurantplus.SharedPrefManager;
 import com.example.restaurantplus.URLs;
 import com.example.restaurantplus.ui.cart.Cart;
-import com.smarteist.autoimageslider.SliderView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +41,7 @@ public class ProductDetail extends AppCompatActivity {
     String rodzaj;
     WebView webView;
     TextView tvTitle,tvDesc,tvPrice;
+    String photoPath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,7 @@ public class ProductDetail extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         id_product=extras.getString("id_product");
         rodzaj=extras.getString("obiekt");
+        photoPath=extras.getString("path");
         ilosc=(EditText) findViewById(R.id.Ilosc);
         getDetails();
         Button buy=(Button) findViewById(R.id.btBuy);
@@ -82,7 +85,6 @@ public class ProductDetail extends AppCompatActivity {
     }
     private void getDetails() {
         class Productdetail extends AsyncTask<Void, Void, String> {
-            SliderView sliderView;
             ProgressBar progressBar;
 
 
@@ -106,14 +108,16 @@ public class ProductDetail extends AppCompatActivity {
                     if (!obj.getBoolean("error")) {
                         JSONArray jsonArray = obj.getJSONArray("productdetail");
                         Button buy=(Button) findViewById(R.id.btBuy);
-                        String[] name = new String[jsonArray.length()];
+                        final String[] name = new String[jsonArray.length()];
                         String[] description = new String[jsonArray.length()];
-                        //String[] price = new String[jsonArray.length()];
+                        final String[] price = new String[jsonArray.length()];
                         for(int i=0;i<jsonArray.length();i++) {
                             JSONObject productdetail = jsonArray.getJSONObject(i);
                             name[i]= productdetail.getString("post_title");
                             description[i]= productdetail.getString("post_content");
-                            //price[i]= productdetail.getString("price");
+                            if(rodzaj.equals("produkt")) {
+                                price[i] = productdetail.getString("meta_value");
+                            }
 
                         }
                         setTitle(name[0]);
@@ -139,6 +143,9 @@ public class ProductDetail extends AppCompatActivity {
                         TextView tvDescription= (TextView) findViewById(R.id.tvDesc);
                         TextView tvPrice= (TextView) findViewById(R.id.tvPrice);*/
                         tvTitle.setText(name[0]);
+                        if(rodzaj.equals("produkt")){
+                            tvPrice.setText(" Cena: "+price[0]+"zł");
+                        }
                         //tvAvailable.setText("Available: "+ String.valueOf(available[0])+" pieces");
                         String temp="<!DOCTYPE html>\n" +
                                 "<html>\n" +
@@ -146,6 +153,22 @@ public class ProductDetail extends AppCompatActivity {
                                 "<body>"+description[0]+"</body>\n" +
                                 "</html>";
                         webView.loadData(temp, "text/html", "UTF-8");
+                        buy.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                int ilosc1=Integer.parseInt(ilosc.getText().toString());
+                                CartDb cartdb=new CartDb();
+                                cartdb.setCost(Double.valueOf(price[0]));
+                                cartdb.setName(name[0]);
+                                cartdb.setPhotoUrl(photoPath);
+                                cartdb.setProductid(Integer.parseInt(id_product));
+                                cartdb.setTotalCost((Double.valueOf(price[0])*ilosc1));
+                                cartdb.setQuantity(ilosc1);
+                                MainActivity.myAppDatabase.cartDao().addProduct(cartdb);
+                                Toast.makeText(getApplicationContext(),"Dodano do koszyka",Toast.LENGTH_SHORT);
+                                finish();
+                            }
+                        });
                        /* tvDesc.setText(Html.fromHtml("<!DOCTYPE html>\n" +
                                         "<html>\n" +
                                         "<head></head>\n" +
@@ -181,74 +204,28 @@ public class ProductDetail extends AppCompatActivity {
 
             @Override
             protected String doInBackground(Void... voids) {
+                if (!rodzaj.equals("produkt")) {
+                    RequestHandler requestHandler = new RequestHandler();
 
-                RequestHandler requestHandler = new RequestHandler();
-
-                HashMap<String, String> params = new HashMap<>();
-                params.put("productid", id_product);
-
-
-                return requestHandler.sendPostRequest(URLs.URL_PRODUCTDETAIL, params);
-            }
-        }
-
-        Productdetail ul = new Productdetail();
-        ul.execute();
-    }
-    private void addToCart() {
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("productid", id_product);
 
 
-        class Productdetail extends AsyncTask<Void, Void, String> {
-            ProgressBar progressBar;
+                    return requestHandler.sendPostRequest(URLs.URL_PRODUCTDETAIL, params);
+                } else {
+                    RequestHandler requestHandler = new RequestHandler();
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                progressBar.setVisibility(View.GONE);
-                try {
-                    JSONObject obj = new JSONObject(s);
-
-                    if (!obj.getBoolean("error")) {
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                        finish();
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("productid", id_product);
 
 
-                    } else {
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    return requestHandler.sendPostRequest(URLs.URL_PRODUCTDETAIL1, params);
                 }
             }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-
-                RequestHandler requestHandler = new RequestHandler();
-               String ilosc1=ilosc.getText().toString();
-                int id= SharedPrefManager.getInstance(getApplicationContext()).getUser().getId();
-                String ids= Integer.toString(id);
-                System.out.println(ids);
-                System.out.println(ilosc1);
-                System.out.println(id_product);
-                //creating request parameters
-                HashMap<String, String> params = new HashMap<>();
-                params.put("quantity",ilosc1);
-                params.put("id_product", id_product);
-                params.put("id_user",ids);
-
-                return requestHandler.sendPostRequest(URLs.URL_ADDPRODUCT, params);
-            }
         }
 
         Productdetail ul = new Productdetail();
         ul.execute();
     }
+
 }

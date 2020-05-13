@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.restaurantplus.CartDb;
+import com.example.restaurantplus.MainActivity;
+import com.example.restaurantplus.MyAppDatabase;
 import com.example.restaurantplus.R;
 import com.example.restaurantplus.RequestHandler;
 import com.example.restaurantplus.URLs;
@@ -22,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 import static com.example.restaurantplus.ui.cart.Cart.customadapter;
@@ -33,13 +37,12 @@ import static com.example.restaurantplus.ui.cart.Cart.plussum;
 public class CartProductListCustomAdapter extends ArrayAdapter<String> {
     private Activity context;
     ArrayList<Integer> id;
-    ArrayList<String> cid;
     ArrayList<String> name;
     ArrayList<String> path;
-    ArrayList<Integer> price;
+    ArrayList<Double> price;
     ArrayList<Integer> quantity;
     int type;
-    public CartProductListCustomAdapter(Activity context, ArrayList<String> cid, ArrayList<Integer> id, ArrayList<String> name, ArrayList<String> path, ArrayList<Integer> price, ArrayList<Integer> quantity, int type) {
+    public CartProductListCustomAdapter(Activity context, ArrayList<Integer> id, ArrayList<String> name, ArrayList<String> path, ArrayList<Double> price, ArrayList<Integer> quantity, int type) {
         super(context, R.layout.cart_listview_layout, name);
         this.context = context;
         this.name = name;
@@ -47,7 +50,6 @@ public class CartProductListCustomAdapter extends ArrayAdapter<String> {
         this.price=price;
         this.quantity=quantity;
         this.id=id;
-        this.cid=cid;
         this.type=type;
     }
     @Override
@@ -76,9 +78,9 @@ public class CartProductListCustomAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View view) {
                     if (quantity.get(position) == 1) {
-                        removeItem(cid.get(position), position);
+                        removeItem(id.get(position), position);
                     } else {
-                        minusItem(cid.get(position),position);
+                        minusItem(id.get(position),position);
                     }
                 }
             });
@@ -86,14 +88,14 @@ public class CartProductListCustomAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View view) {
 
-                    plusItem(cid.get(position),position);
+                    plusItem(id.get(position),position);
                 }
             });
             listViewItem.findViewById(R.id.btRemove).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    removeItem(cid.get(position), position);
+                    removeItem(id.get(position), position);
 
                 }
             });
@@ -102,165 +104,49 @@ public class CartProductListCustomAdapter extends ArrayAdapter<String> {
             sum.setText("Sum: "+quantity.get(position)*price.get(position)+"zł");
         }
         ImageView image = (ImageView) listViewItem.findViewById(R.id.imimage);
-        new DownLoadImageTask(image).execute(URLs.URL_PPHOTO+path.get(position));
+        new DownLoadImageTask(image).execute(path.get(position));
         return  listViewItem;
     }
-    private void minusItem(final String ids, final int position) {
-        class MinusItem extends AsyncTask<Void, Void, String> {
-            String idp=ids;
-            ProgressBar progressBar;
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressBar = (ProgressBar) context.findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.VISIBLE);
+    private void minusItem(final int ids, final int position) {
+        List<CartDb> cartDb=MainActivity.myAppDatabase.cartDao().getProductbyId(ids);
+        for(CartDb cartDb1:cartDb){
+            if(cartDb1.getQuantity()==1){
+                removeItem(ids,position);
+                return;
+            } else {
+                MainActivity.myAppDatabase.cartDao().changeQuantity(ids, (cartDb1.getQuantity() - 1), (cartDb1.getTotalCost() - cartDb1.getCost()));
             }
-            private ArrayList<String> arrayList;
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                progressBar.setVisibility(View.GONE);
-
-
-                try {
-                    JSONObject obj = new JSONObject(s);
-                    if (!obj.getBoolean("error")) {
-                        minussum(price.get(position));
-                        int tempprice=quantity.get(position);
-                        tempprice--;
-                        quantity.set( position, tempprice );
-                        customadapter.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(context.getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-
-                RequestHandler requestHandler = new RequestHandler();
-
-                HashMap<String, String> params = new HashMap<>();
-                params.put("id", idp);
-
-
-                return requestHandler.sendPostRequest(URLs.URL_MINUSITEM, params);
-            }
+            break;
         }
+        minussum(price.get(position));
+        int tempprice=quantity.get(position);
+        tempprice--;
+        quantity.set( position, tempprice );
+        customadapter.notifyDataSetChanged();
 
-        MinusItem ul = new MinusItem();
-        ul.execute();
     }
-    private void plusItem(final String ids, final int position) {
-        class PlusItem extends AsyncTask<Void, Void, String> {
-            String idp=ids;
-            ProgressBar progressBar;
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressBar = (ProgressBar) context.findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-            private ArrayList<String> arrayList;
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                progressBar.setVisibility(View.GONE);
-
-
-                try {
-
-                    JSONObject obj = new JSONObject(s);
-
-                    if (!obj.getBoolean("error")) {
-                        plussum(price.get(position));
-                        int tempprice=quantity.get(position);
-                        tempprice++;
-                        quantity.set( position, tempprice );
-                        customadapter.notifyDataSetChanged();
-
-                    } else {
-                        Toast.makeText(context, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-
-                RequestHandler requestHandler = new RequestHandler();
-
-                HashMap<String, String> params = new HashMap<>();
-                params.put("id", idp);
-                System.out.println(id.get(position).toString());
-                params.put("idp",id.get(position).toString());
-
-
-                return requestHandler.sendPostRequest(URLs.URL_PLUSITEM, params);
-            }
+    private void plusItem(final int ids, final int position) {
+        List<CartDb> cartDb=MainActivity.myAppDatabase.cartDao().getProductbyId(ids);
+        for(CartDb cartDb1:cartDb){
+            MainActivity.myAppDatabase.cartDao().changeQuantity(ids,(cartDb1.getQuantity()+1),(cartDb1.getTotalCost()+cartDb1.getCost()));
+            break;
         }
+        plussum(price.get(position));
+        int tempprice=quantity.get(position);
+        tempprice++;
+        quantity.set( position, tempprice );
+        customadapter.notifyDataSetChanged();
 
-        PlusItem ul = new PlusItem();
-        ul.execute();
+
     }
-    private void removeItem(final String ids, final int position) {
-        class RemoveItem extends AsyncTask<Void, Void, String> {
-            String idp=ids;
-            ProgressBar progressBar;
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressBar = (ProgressBar) context.findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-            private ArrayList<String> arrayList;
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                progressBar.setVisibility(View.GONE);
-
-
-                try {
-
-                    JSONObject obj = new JSONObject(s);
-
-                    if (!obj.getBoolean("error")) {
-                        //context.recreate();
-                        minussum(quantity.get(position)*price.get(position));
-                        name.remove(position);
-                        path.remove(position);
-                        price.remove(position);
-                        quantity.remove(position);
-                        id.remove(position);
-                        cid.remove(position);
-                        listView.invalidateViews();
-                    } else {
-                        Toast.makeText(context.getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-
-                RequestHandler requestHandler = new RequestHandler();
-
-                HashMap<String, String> params = new HashMap<>();
-                params.put("id", idp);
-
-
-                return requestHandler.sendPostRequest(URLs.URL_REMOVEITEM, params);
-            }
-        }
-
-        RemoveItem ul = new RemoveItem();
-        ul.execute();
+    private void removeItem(final int ids, final int position) {
+        MainActivity.myAppDatabase.cartDao().deleteProductById(ids);
+        minussum(quantity.get(position)*price.get(position));
+        name.remove(position);
+        path.remove(position);
+        price.remove(position);
+        quantity.remove(position);
+        id.remove(position);
+        listView.invalidateViews();
     }
 }

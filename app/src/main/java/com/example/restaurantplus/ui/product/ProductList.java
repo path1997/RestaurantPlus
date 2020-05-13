@@ -85,7 +85,7 @@ public class ProductList extends AppCompatActivity {
 
                         ida = new String[jsonArray.length()];
                         String[] name = new String[jsonArray.length()];
-                        String[] path = new String[jsonArray.length()];
+                        final String[] path = new String[jsonArray.length()];
                         String[] price = new String[jsonArray.length()];
                         for(int i=0;i<jsonArray.length();i++) {
                             JSONObject category = jsonArray.getJSONObject(i);
@@ -126,6 +126,7 @@ public class ProductList extends AppCompatActivity {
                                 String idP=ida[position];
                                 intent.putExtra("id_product", idP);
                                 intent.putExtra("obiekt","produkt");
+                                intent.putExtra("path",path[position]);
                                 startActivity(intent);
                             }
                         });

@@ -18,10 +18,12 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.room.Room;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    public static MyAppDatabase myAppDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +39,34 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        
+        myAppDatabase= Room.databaseBuilder(getApplicationContext(),MyAppDatabase.class,"database").allowMainThreadQueries().build();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_menu, R.id.nav_login)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            //textView.setText("Witaj "+SharedPrefManager.getUserName());
+            /*textView.setText("Hi "+ SharedPrefManager.getUserName());
+            nav_login.setTitle("My account");
+            nav_myorders.setVisible(true);
+            nav_addanouncement.setVisible(true);
+            nav_myanouncement.setVisible(true);*/
+
+        } else {
+           /* textView.setText("You are not logged in");
+            nav_myorders.setVisible(false);
+            nav_addanouncement.setVisible(false);
+            nav_myanouncement.setVisible(false);*/
+
+
+        }
     }
 
     public void setActionBarTitle(String title) {

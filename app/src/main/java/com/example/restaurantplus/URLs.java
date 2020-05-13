@@ -17,17 +17,17 @@ public class URLs {
     public static final String URL_REMOVERESERVATION ="http://carparts.5v.pl/android/order.php?apicall=removereservation";
 
     //-------------------------------------------------USER-------------------------------------------------------
-    public static final String URL_REGISTER = ROOT_URL + "signup";
-    public static final String URL_LOGIN = ROOT_URL + "login";
-    public static final String URL_CHANGEDATA ="http://carparts.5v.pl/android/Api.php?apicall=changedata";
-    public static final String URL_CHANGEPASSWORD ="http://carparts.5v.pl/android/Api.php?apicall=changepassword";
+    public static final String URL_REGISTER = "http://restaurantplus.5v.pl/wordpress/wp-content/themes/RestaurantPlus/android/loginRegister.php?apicall=register";
+    public static final String URL_LOGIN = "http://restaurantplus.5v.pl/wordpress/wp-content/themes/RestaurantPlus/android/loginRegister.php?apicall=login";
+    public static final String URL_CHANGEDATA ="http://restaurantplus.5v.pl/wordpress/wp-content/themes/RestaurantPlus/android/loginRegister.php?apicall=changedata";
+    public static final String URL_CHANGEPASSWORD ="http://restaurantplus.5v.pl/wordpress/wp-content/themes/RestaurantPlus/android/loginRegister.php?apicall=changepassword";
 
     //------------------------------------------------PRODUCT-----------------------------------------------------
-    public static final String URL_CATEGORY= "http://restaurantplus.5v.pl/android/products.php?apicall=category";
-    public static final String URL_PRODUCTLIST= "http://restaurantplus.5v.pl/android/products.php?apicall=productlist";
-    public static final String URL_PRODUCTLISTFORHOME= "http://restaurantplus.5v.pl/android/products.php?apicall=productlistforhome";
-    public static final String URL_PRODUCTDETAIL= "http://restaurantplus.5v.pl/android/products.php?apicall=productdetail";
-    public static final String URL_ADDPRODUCT ="http://carparts.5v.pl/android/cart.php?apicall=addproduct";
+    public static final String URL_CATEGORY= "http://restaurantplus.5v.pl/wordpress/wp-content/themes/RestaurantPlus/android/products.php?apicall=category";
+    public static final String URL_PRODUCTLIST= "http://restaurantplus.5v.pl/wordpress/wp-content/themes/RestaurantPlus/android/products.php?apicall=productlist";
+    public static final String URL_PRODUCTLISTFORHOME= "http://restaurantplus.5v.pl/wordpress/wp-content/themes/RestaurantPlus/android/products.php?apicall=productlistforhome";
+    public static final String URL_PRODUCTDETAIL= "http://restaurantplus.5v.pl/wordpress/wp-content/themes/RestaurantPlus/android/products.php?apicall=productdetail";
+    public static final String URL_PRODUCTDETAIL1= "http://restaurantplus.5v.pl/wordpress/wp-content/themes/RestaurantPlus/android/products.php?apicall=productdetail1";
 
     //------------------------------------------------ANNOUNCEMENT------------------------------------------------
     public static final String URL_ALLANNOUNCEMENT ="http://carparts.5v.pl/android/announcement.php?apicall=allannouncement";

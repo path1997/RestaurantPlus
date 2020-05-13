@@ -7,8 +7,21 @@
     tools:context=".ui.cart.Cart"
     android:background="@color/add_ann_background">
 
+    <TextView
+        android:id="@+id/txZaloguj"
+        android:layout_width="204dp"
+        android:layout_height="57dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="Zaloguj się by złożyć zamówienie"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
     <Button
-        android:id="@+id/btdelivery"
+        android:id="@+id/btZamowienie"
         android:layout_width="212dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -16,20 +29,22 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="19dp"
         android:background="@drawable/btn_gradient_upload_image"
-        android:text="Choose method delivery" />
+        android:text="Złóż zamówienie" />
 
     <ListView
         android:id="@+id/listviewcart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btdelivery"
+        android:layout_above="@+id/btZamowienie"
         android:layout_below="@+id/textView11"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp">
+
+    </ListView>
 
     <TextView
         android:id="@+id/textView11"
@@ -72,10 +87,9 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="9dp"
         android:layout_marginBottom="17dp"
-        android:layout_toStartOf="@+id/btdelivery"
+        android:layout_toStartOf="@+id/btZamowienie"
         android:textAlignment="center"
-        android:textSize="16sp"/>
-
+        android:textSize="16sp" />
 
 
 </RelativeLayout>
