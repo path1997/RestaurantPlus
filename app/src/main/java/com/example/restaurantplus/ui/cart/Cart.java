@@ -71,7 +71,7 @@ public class Cart extends AppCompatActivity {
         if(MainActivity.myAppDatabase.cartDao().getCount()==0) {
             btZamow.setVisibility(View.INVISIBLE);
             tvZaloguj.setVisibility(View.VISIBLE);
-            tvZaloguj.setText("Koszyk jest pusty");
+            tvZaloguj.setText("Cart is empty");
         }
         suma=0;
         List<CartDb> cartDbs=MainActivity.myAppDatabase.cartDao().getProducts();
@@ -106,9 +106,75 @@ public class Cart extends AppCompatActivity {
         btZamow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                addOrder(MainActivity.myAppDatabase.cartDao().getProducts());
             }
         });
+    }
+
+    void addOrder(final List<CartDb> koszyk){
+        class Deliveryc extends AsyncTask<Void, Void, String> {
+            ProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            private ArrayList<String> arrayList;
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                progressBar.setVisibility(View.GONE);
+
+
+                try {
+
+                    JSONObject obj = new JSONObject(s);
+
+                    if (!obj.getBoolean("error")) {
+                        MainActivity.myAppDatabase.cartDao().deleteAllProduct();
+                        recreate();
+
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected String doInBackground(Void... voids) {
+
+                RequestHandler requestHandler = new RequestHandler();
+                int id = SharedPrefManager.getInstance(getApplicationContext()).getUser().getId();
+                String ids = Integer.toString(id);
+                int count=MainActivity.myAppDatabase.cartDao().productCount();
+                String countString=Integer.toString(count);
+                int totalcostOrder=MainActivity.myAppDatabase.cartDao().totalCost();
+                HashMap<String, String> params = new HashMap<>();
+                params.put("count",countString);
+                params.put("user_id", ids);
+                params.put("totalCostOrder",Integer.toString(totalcostOrder));
+                int licznik=0;
+                for (CartDb x:koszyk) {
+                    params.put("name"+licznik,x.name);
+                    params.put("photo"+licznik,x.photoUrl);
+                    params.put("cost"+licznik,Double.toString(x.cost));
+                    params.put("totalCost"+licznik,Double.toString(x.totalCost));
+                    params.put("quantity"+licznik,Double.toString(x.quantity));
+                    licznik++;
+                }
+
+                return requestHandler.sendPostRequest(URLs.URL_CONFIRMORDER, params);
+            }
+        }
+        Deliveryc ul = new Deliveryc();
+        ul.execute();
     }
 
 }

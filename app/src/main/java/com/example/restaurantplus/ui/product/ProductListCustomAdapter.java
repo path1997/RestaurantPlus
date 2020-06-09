@@ -32,7 +32,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<String> {
         TextView priceTx = (TextView) listViewItem.findViewById(R.id.txprice);
         nameTx.setText(name[position] );
         if(!price[0].equals("brak")) {
-            priceTx.setText("Cena: " + price[position] + "zł");
+            priceTx.setText("Cost: " + price[position] + "zł");
         }
         if(!path[position].equals("brak")) {
             ImageView image = (ImageView) listViewItem.findViewById(R.id.imimage);

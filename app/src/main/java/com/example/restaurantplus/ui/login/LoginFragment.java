@@ -77,12 +77,10 @@ public class LoginFragment extends Fragment {
                     navigationView.getMenu().performIdentifierAction(R.id.nav_home, 0);
                     Menu menu = navigationView.getMenu();
                     MenuItem nav_login = menu.findItem(R.id.nav_login);
-                    MenuItem nav_myorders = menu.findItem(R.id.nav_my_orders);
                     nav_login.setTitle("Login");
                     View header = navigationView.getHeaderView(0);
                     TextView textView= (TextView) header.findViewById(R.id.textView);
                     textView.setText("You are not logged in");
-                    nav_myorders.setVisible(false);
                 }
             });
         } else {
@@ -175,12 +173,10 @@ public class LoginFragment extends Fragment {
                         navigationView.getMenu().performIdentifierAction(R.id.nav_home, 0);
                         Menu menu = navigationView.getMenu();
                         MenuItem nav_login = menu.findItem(R.id.nav_login);
-                        MenuItem nav_myorders = menu.findItem(R.id.nav_my_orders);
                         nav_login.setTitle("My account");
                         View header = navigationView.getHeaderView(0);
                         TextView textView= (TextView) header.findViewById(R.id.textView);
                         textView.setText("Hi "+user.getFname()+" "+user.getSname());
-                        nav_myorders.setVisible(true);
 
                     } else {
                         Toast.makeText(getActivity().getApplicationContext(), "Invalid username or password", Toast.LENGTH_SHORT).show();

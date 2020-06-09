@@ -16,22 +16,23 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="0dp"
-        android:text="Welcome to CarParts shop"
+        android:text="Welcome to RestaurantPlus"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView10"
-        android:layout_width="282dp"
+        android:layout_width="398dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView3"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="129dp"
-        android:text="Last added products"
+        android:layout_marginEnd="3dp"
+        android:gravity="center"
+        android:text="News"
         android:textSize="18sp" />
 
     <ListView

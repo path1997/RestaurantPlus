@@ -10,7 +10,7 @@ public class URLs {
     public static final String URL_MINUSITEM ="http://carparts.5v.pl/android/cart.php?apicall=minusitem";
     public static final String URL_PLUSITEM ="http://carparts.5v.pl/android/cart.php?apicall=plusitem";
     public static final String URL_REMOVEITEM ="http://carparts.5v.pl/android/cart.php?apicall=removeitem";
-    public static final String URL_CONFIRMORDER ="http://carparts.5v.pl/android/order.php?apicall=confirmorder";
+    public static final String URL_CONFIRMORDER ="http://restaurantplus.5v.pl/wordpress/wp-content/themes/RestaurantPlus/android/products.php?apicall=order";
     public static final String URL_GETMYORDER ="http://carparts.5v.pl/android/order.php?apicall=getmyorder";
     public static final String URL_GETMYORDERDETAIL ="http://carparts.5v.pl/android/order.php?apicall=getmyorderdetail";
     public static final String URL_ADDRESERVATION ="http://carparts.5v.pl/android/order.php?apicall=addreservation";

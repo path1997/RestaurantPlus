@@ -14,6 +14,9 @@ public interface CartDao {
     @Query("select * from cart")
     public List<CartDb> getProducts();
 
+    @Query("select count(productid) from cart")
+    public int productCount();
+
     @Query("select sum(totalCost) from cart")
     public int totalCost();
 

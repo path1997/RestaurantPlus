@@ -16,7 +16,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:text="Zaloguj się by złożyć zamówienie"
+        android:text="You must login to submit your order"
         android:textSize="18sp"
         android:visibility="gone" />
 
@@ -29,7 +29,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="19dp"
         android:background="@drawable/btn_gradient_upload_image"
-        android:text="Złóż zamówienie" />
+        android:text="Submit your order" />
 
     <ListView
         android:id="@+id/listviewcart"

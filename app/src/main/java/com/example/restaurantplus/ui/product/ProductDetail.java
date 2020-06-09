@@ -144,7 +144,7 @@ public class ProductDetail extends AppCompatActivity {
                         TextView tvPrice= (TextView) findViewById(R.id.tvPrice);*/
                         tvTitle.setText(name[0]);
                         if(rodzaj.equals("produkt")){
-                            tvPrice.setText(" Cena: "+price[0]+"zł");
+                            tvPrice.setText(" Cost: "+price[0]+"zł");
                         }
                         //tvAvailable.setText("Available: "+ String.valueOf(available[0])+" pieces");
                         String temp="<!DOCTYPE html>\n" +
